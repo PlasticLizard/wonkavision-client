@@ -8,6 +8,12 @@ require "wonkavision_client/version"
 require "wonkavision_client/extensions"
 require "wonkavision_client/member_filter"
 require "wonkavision_client/query"
+require "wonkavision_client/cellset/cell"
+require "wonkavision_client/cellset/axis"
+require "wonkavision_client/cellset/measure"
+require "wonkavision_client/cellset/dimension"
+require "wonkavision_client/cellset/member"
+require "wonkavision_client/cellset"
 
 module Wonkavision
   class Client
@@ -64,6 +70,7 @@ module Wonkavision
       return response.body if raw
       
       cellset_data = decode response.body
+      Cellset.new(cellset_data)
     end
 
     #helpers

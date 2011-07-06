@@ -54,7 +54,7 @@ describe Wonkavision::Client do
     end
     it "should decode the response as json" do
       @client.connection.should_receive("get").with("a/b").and_return(mock(:response, :body => Yajl::Encoder.encode({"a"=>"b"})))
-      @client.get("a/b").should == {"a"=>"b"}    
+      @client.get("a/b").should be_a_kind_of Wonkavision::Client::Cellset
     end
     it "should return the raw response when requested" do
       @client.connection.should_receive("get").with("a/b").and_return(mock(:response, :body => Yajl::Encoder.encode({"a"=>"b"})))
