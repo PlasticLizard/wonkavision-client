@@ -56,6 +56,18 @@ describe Wonkavision::Client do
       @client.should_receive("get").with("facts/b", {})
       @client.facts("b",nil)
     end
+    it "should paginate facts if pagination info is returned" do
+      @client.should_receive("get").and_return "data" => [1,2,3],
+                                               "pagination" => {
+                                                  "total_entries" => 3,
+                                                  "per_page" => 1,
+                                                  "current_page" => 2
+                                                }
+      results = @client.facts("b",nil)["data"]
+      results.total_entries.should == 3
+      results.per_page.should == 1
+      results.current_page.should == 2
+    end
   end
 
   describe "get" do

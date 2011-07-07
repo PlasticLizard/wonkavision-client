@@ -14,6 +14,7 @@ require "wonkavision_client/cellset/measure"
 require "wonkavision_client/cellset/dimension"
 require "wonkavision_client/cellset/member"
 require "wonkavision_client/cellset"
+require "wonkavision_client/paginated"
 
 module Wonkavision
   class Client
@@ -54,7 +55,11 @@ module Wonkavision
     def facts(aggregation_name, filters, options ={})
       params = options.dup
       params["filters"] = filters.map{ |f| f.to_s }.join(",") if filters
-      get("facts/#{aggregation_name}", params)
+      facts = get("facts/#{aggregation_name}", params)
+      if facts && facts["pagination"]
+        Paginated.apply(facts["data"], facts["pagination"])    
+      end
+      facts
     end
 
     #http methods
