@@ -12,13 +12,33 @@ module Wonkavision
           end
         end
 
-        def non_empty?(*parents)
-          member.reject { |mem| is_empty?(mem, *parents) }
+        def non_empty(*parents)
+          members.reject { |mem| is_empty?(mem, *parents) }
         end
 
-        def is_empty?(member, *parent)
+        def is_empty?(member, *parents)
           key = parents.dup << member.key
           axis[key].empty?
+        end
+
+        def position
+          axis.dimensions.index(self)
+        end
+
+        def next_dimension
+          axis.dimensions[position+1]
+        end
+
+        def previous_dimension
+          axis.dimensions[position-1]
+        end
+
+        def root?
+          !previous_dimension
+        end
+
+        def leaf?
+          !next_dimension
         end
         
       end
