@@ -47,6 +47,17 @@ describe Wonkavision::Client do
     end
   end
 
+  describe "facts" do
+    it "should merge provided filters into the options hash" do
+      @client.should_receive("get").with("facts/b", {"filters" => "dimension::a::key::eq::'b',dimension::c::key::eq::'d'", :page => 1})
+      @client.facts("b", [:dimensions.a.eq("b"), :dimensions.c.eq("d")], :page => 1)
+    end
+    it "should prepare an appropriate url from the aggregation name" do
+      @client.should_receive("get").with("facts/b", {})
+      @client.facts("b",nil)
+    end
+  end
+
   describe "get" do
     it "should delegate the request to the connection" do
       @client.connection.should_receive("get").with("a/b").and_return(mock(:response, :body => nil))
@@ -54,7 +65,7 @@ describe Wonkavision::Client do
     end
     it "should decode the response as json" do
       @client.connection.should_receive("get").with("a/b").and_return(mock(:response, :body => Yajl::Encoder.encode({"a"=>"b"})))
-      @client.get("a/b").should be_a_kind_of Wonkavision::Client::Cellset
+      @client.get("a/b").should be_a_kind_of Hash
     end
     it "should return the raw response when requested" do
       @client.connection.should_receive("get").with("a/b").and_return(mock(:response, :body => Yajl::Encoder.encode({"a"=>"b"})))

@@ -66,8 +66,10 @@ module Wonkavision
       end
 
       def execute(opts={})
+        raw = opts[:raw]
         validate!
-        @client.get("query/#{@from}", self.to_params.merge!(opts))
+        cellset_data = @client.get("query/#{@from}", self.to_params.merge!(opts))
+        raw ? cellset_data : Cellset.new(cellset_data)  
       end
 
       def self.axis_names

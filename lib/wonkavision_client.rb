@@ -51,6 +51,12 @@ module Wonkavision
       new_query
     end
 
+    def facts(aggregation_name, filters, options ={})
+      params = options.dup
+      params["filters"] = filters.map{ |f| f.to_s }.join(",") if filters
+      get("facts/#{aggregation_name}", params)
+    end
+
     #http methods
     def self.default_adapter
       Faraday.default_adapter
@@ -67,10 +73,7 @@ module Wonkavision
         r.headers['Accept'] = 'application/json'    
       end
 
-      return response.body if raw
-      
-      cellset_data = decode response.body
-      Cellset.new(cellset_data)
+      raw ? response.body : decode(response.body)
     end
 
     #helpers
