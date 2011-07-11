@@ -54,7 +54,7 @@ module Wonkavision
       def to_params
         query = {}
         query["measures"] = @measures.join(",") if @measures.length > 0
-        query["filters"] = @filters.map{|f|f.to_s}.join(",") if @filters.length > 0
+        query["filters"] = prepare_filters.map{|f|f.to_s}.join(",") if filters.length > 0
         axes.each_with_index do |axis, index|
           query[self.class.axis_name(index)] = axis.map{|dim|dim.to_s}.join(",")
         end
@@ -97,6 +97,10 @@ module Wonkavision
         opts.merge!(new_options)
         args.push opts
         self
+      end
+
+      def prepare_filters
+        (@filters + Wonkavision::Client.context.global_filters).compact.uniq
       end
 
     end

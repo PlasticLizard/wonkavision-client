@@ -5,6 +5,7 @@ require "faraday"
 require "yajl"
 
 require "wonkavision_client/version"
+require "wonkavision_client/context"
 require "wonkavision_client/extensions"
 require "wonkavision_client/member_filter"
 require "wonkavision_client/query"
