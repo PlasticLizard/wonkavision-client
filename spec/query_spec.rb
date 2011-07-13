@@ -3,7 +3,7 @@ Query = Wonkavision::Client::Query
 
 describe Wonkavision::Client::Query do
   before :each do
-    @client = mock(:client)
+    @client = mock(:client, :prepare_filters => "dimension::a::key::eq::'d'")
     @query = Query.new(@client)
   end
 
@@ -136,11 +136,4 @@ describe Wonkavision::Client::Query do
     end
   end
 
-  describe "prepare_filters" do
-    it "should include global filers" do
-      Wonkavision::Client.context.filter :hi => 3
-      @query.where :ho => 1
-      @query.send(:prepare_filters).should == [:dimensions.ho.eq(1), :dimensions.hi.eq(3)]
-    end
-  end
 end

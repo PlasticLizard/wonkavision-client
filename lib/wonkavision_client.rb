@@ -55,7 +55,7 @@ module Wonkavision
 
     def facts(aggregation_name, filters, options ={})
       params = options.dup
-      params["filters"] = filters.map{ |f| f.to_s }.join(",") if filters
+      params["filters"] = prepare_filters(filters) if filters
       facts = get("facts/#{aggregation_name}", params)
       if facts && facts["pagination"]
         Paginated.apply(facts["data"], facts["pagination"])    
@@ -85,6 +85,11 @@ module Wonkavision
     #helpers
     def decode(json = nil)
       json ? Yajl::Parser.new.parse(json) : {}
+    end
+
+    def prepare_filters(filters)
+      filters = (filters + Wonkavision::Client.context.global_filters).compact.uniq
+      filters.map{|f|f.to_s}.join(Query::LIST_DELIMITER)  
     end
 
   end

@@ -49,7 +49,7 @@ describe Wonkavision::Client do
 
   describe "facts" do
     it "should merge provided filters into the options hash" do
-      @client.should_receive("get").with("facts/b", {"filters" => "dimension::a::key::eq::'b',dimension::c::key::eq::'d'", :page => 1})
+      @client.should_receive("get").with("facts/b", {"filters" => "dimension::a::key::eq::'b'|dimension::c::key::eq::'d'", :page => 1})
       @client.facts("b", [:dimensions.a.eq("b"), :dimensions.c.eq("d")], :page => 1)
     end
     it "should prepare an appropriate url from the aggregation name" do
@@ -91,5 +91,12 @@ describe Wonkavision::Client do
 
   it "should decode json" do
     @client.decode(Yajl::Encoder.encode({"a"=>"b"})).should == {"a"=>"b"}  
+  end
+
+  describe "prepare_filters" do
+    it "should include global filers" do
+      Wonkavision::Client.context.filter :hi => 3
+      @client.send(:prepare_filters, [:dimensions.ho.eq(1)]).should == [:dimensions.ho.eq(1), :dimensions.hi.eq(3)].map{|f|f.to_s}.join("|")
+    end
   end
 end
