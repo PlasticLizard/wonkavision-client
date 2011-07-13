@@ -85,14 +85,14 @@ describe Wonkavision::Client::Query do
       @hash["from"].should == "the top"
     end
     it "should include measures" do
-      @hash["measures"].should == "a,b,c"
+      @hash["measures"].should == "a|b|c"
     end
     it "Should include filters" do
       @hash["filters"].should == "dimension::a::key::eq::'d'"
     end
     it "should include specified axes" do
       @hash["columns"].should == "e"
-      @hash["rows"].should == "f,g"
+      @hash["rows"].should == "f|g"
     end
     it "should not include non-specified axes" do
       Query.axis_names[2..-1].each do |axis_name|

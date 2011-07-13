@@ -1,6 +1,7 @@
 module Wonkavision
   class Client
     class Query
+      LIST_DELIMITER = "|"
       
       attr_reader :axes, :filters, :client
 
@@ -53,10 +54,10 @@ module Wonkavision
 
       def to_params
         query = {}
-        query["measures"] = @measures.join(",") if @measures.length > 0
-        query["filters"] = prepare_filters.map{|f|f.to_s}.join(",") if filters.length > 0
+        query["measures"] = @measures.join(LIST_DELIMITER) if @measures.length > 0
+        query["filters"] = prepare_filters.map{|f|f.to_s}.join(LIST_DELIMITER) if filters.length > 0
         axes.each_with_index do |axis, index|
-          query[self.class.axis_name(index)] = axis.map{|dim|dim.to_s}.join(",")
+          query[self.class.axis_name(index)] = axis.map{|dim|dim.to_s}.join(LIST_DELIMITER)
         end
         query
       end
