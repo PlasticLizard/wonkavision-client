@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Nathan"]
   s.email       = ["nathan_stults@hsihealth.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A client. for wonkavision. BAM!}
+  s.description = %q{Someday you will understand. Someday, somebody will understand.}
 
   s.rubyforge_project = "wonkavision-client"
 
