@@ -10,7 +10,7 @@ module Wonkavision
       end
 
       def query(options = {}, &block)
-        new_query = Query.new(self, options)
+        new_query = Query.new(@client, options)
         new_query.from(@name)
         if block_given?
           if block.arity > 0
