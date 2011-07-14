@@ -16,6 +16,8 @@ require "wonkavision_client/cellset/dimension"
 require "wonkavision_client/cellset/member"
 require "wonkavision_client/cellset"
 require "wonkavision_client/paginated"
+require "wonkavision_client/aggregation"
+require "wonkavision_client/facts"
 
 module Wonkavision
   class Client
@@ -34,6 +36,9 @@ module Wonkavision
         builder.response :logger if @verbose
         builder.adapter @adapter
       end
+
+      @facts = {}
+      @aggregations = {}
     end
 
     def url
@@ -41,32 +46,14 @@ module Wonkavision
       "#{scheme}://#{host}:#{port}"
     end
 
-    def query(options = {}, &block)
-      new_query = Query.new(self, options)
-      if block_given?
-        if block.arity > 0
-          yield new_query
-        else
-          new_query.instance_eval(&block)
-        end
-      end
-      new_query
+    def facts(facts_name)
+      @facts[facts_name] ||= Facts.new(self,facts_name)
     end
 
-    def facts(aggregation_name, filters, options ={})
-      params = options.dup
-      params["filters"] = prepare_filters(filters) if filters
-      facts = get("facts/#{aggregation_name}", params)
-      if facts && facts["pagination"]
-        Paginated.apply(facts["data"], facts["pagination"])    
-      end
-      facts
+    def aggregation(aggregation_name)
+      @aggregations[aggregation_name] ||= Aggregation.new(self,aggregation_name)
     end
-
-    def purge!(facts_name)
-      get("admin/facts/#{facts_name}/purge")
-    end
-
+  
     #http methods
     def self.default_adapter
       Faraday.default_adapter
