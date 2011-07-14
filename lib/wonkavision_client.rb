@@ -63,6 +63,10 @@ module Wonkavision
       facts
     end
 
+    def purge!(facts_name)
+      get("admin/facts/#{facts_name}/purge")
+    end
+
     #http methods
     def self.default_adapter
       Faraday.default_adapter
