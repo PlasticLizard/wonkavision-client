@@ -53,6 +53,7 @@ module Wonkavision
     def aggregation(aggregation_name)
       @aggregations[aggregation_name] ||= Aggregation.new(self,aggregation_name)
     end
+    alias :[] :aggregation
   
     #http methods
     def self.default_adapter
