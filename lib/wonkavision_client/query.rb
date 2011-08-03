@@ -78,6 +78,8 @@ module Wonkavision
         raw = opts[:raw]
         validate!
         cellset_data = @client.get("query/#{@from}", self.to_params.merge!(opts))
+        return cellset_data if raw
+        cs = Cellset.new(cellset_data)
         raw ? cellset_data : Cellset.new(cellset_data)  
       end
 

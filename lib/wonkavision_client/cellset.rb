@@ -22,6 +22,13 @@ module Wonkavision
         end
       end
 
+      def pivot
+        rows = axes[0]
+        axes[0] = axes[1]
+        axes[1] = rows
+        self
+      end
+
       def columns; axes[0]; end
       def rows; axes[1]; end
       def pages; axex[2]; end
