@@ -63,7 +63,7 @@ module Wonkavision
         query = {}
         query["snapshot"] = @snapshot if @snapshot
         query["measures"] = @measures.join(LIST_DELIMITER) if @measures.length > 0
-        query["filters"] = @client.prepare_filters(@filters) if filters.length > 0
+        query["filters"] = @client.prepare_filters(@filters)
         axes.each_with_index do |axis, index|
           query[self.class.axis_name(index)] = axis.map{|dim|dim.to_s}.join(LIST_DELIMITER)
         end
