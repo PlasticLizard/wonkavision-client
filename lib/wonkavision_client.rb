@@ -33,6 +33,7 @@ module Wonkavision
 
       @connection = Faraday.new(:url => self.url) do |builder|
         builder.request :url_encoded
+        builder.request :json
         builder.response :logger if @verbose
         builder.adapter @adapter
       end
@@ -54,6 +55,10 @@ module Wonkavision
       @aggregations[aggregation_name] ||= Aggregation.new(self,aggregation_name)
     end
     alias :[] :aggregation
+
+    def submit_event(event_path, event_data)
+      @connection.post "/events/#{event_path}", event_data, 'Content-Type' => 'application/json'
+    end
   
     #http methods
     def self.default_adapter
@@ -72,6 +77,10 @@ module Wonkavision
       end
 
       raw ? response.body : decode(response.body)
+    end
+
+    def post(path, payload)
+      @connection.post path, body
     end
 
     #helpers

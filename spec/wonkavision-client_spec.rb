@@ -38,6 +38,13 @@ describe Wonkavision::Client do
     end
   end
 
+  describe "submit_event" do
+    it "should construct a url and submit the event data as a json payload" do
+      @client.connection.should_receive(:post).with("/events/tada/hi", {:my=>:friend}, 'Content-Type' => 'application/json')
+      @client.submit_event("tada/hi", {:my=>:friend})  
+    end
+  end
+
   it "should format a url according to secure, host and port" do
     @client.url.should == "https://localhost:80"
   end
